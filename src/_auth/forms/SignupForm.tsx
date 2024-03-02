@@ -13,29 +13,63 @@ import {
 import { Input } from "@/components/ui/input"
 import { signUpValidation } from "@/lib/validation";
 import { Loader } from "lucide-react";
-import { Link } from "react-router-dom";
-import { createUserAccount } from "@/lib/appwrite/api";
+import { Link, useNavigate } from "react-router-dom";
+import { useCreateUserAccount, useSignInAccount } from "@/lib/react-query/queries";
+import { useToast } from "@/components/ui/use-toast";
+import { useUserContext } from "@/context/AuthContext";
 
 const SignupForm = () => {
+  const { toast } = useToast();
+  const navigate = useNavigate();
+  const { checkAuthUser, isLoading: isUserLoading } = useUserContext()
 
   const form = useForm<z.infer<typeof signUpValidation>>({
     resolver: zodResolver(signUpValidation),
     defaultValues: {
       name: "",
       username: "",
-      email: '',
-      password: ''
+      email: "",
+      password: ""
     },
   })
 
-  async function onSubmit(values: z.infer<typeof signUpValidation>) {
+  // Queries
+  const { mutateAsync: createUserAccount, isPending: isCreatingAccount } = useCreateUserAccount();
+  const { mutateAsync: signInAccount, isPending: isSignIn } = useSignInAccount();
 
-    const newAccount = await createUserAccount(values)
-    console.log(newAccount);
+  // Handler
+  const handleSignup = async (user: z.infer<typeof signUpValidation>) => {
+    try {
+      const newUser = await createUserAccount(user)
 
+      if (!newUser) {
+
+        toast({ title: "Sign up failed. Please try again." })
+        return;
+      }
+
+      const session = signInAccount({ email: user.email, password: user.password })
+
+      if (!session) {
+        toast({ title: "Something went wrong. Please login your new account", });
+        navigate('/sign-in');
+        return;
+      }
+
+      const isLoggedIn = await checkAuthUser();
+      if (isLoggedIn) {
+        form.reset()
+
+        navigate("/")
+      } else {
+        toast({ title: "Login failed. Please try again.", });
+
+        return;
+      }
+    } catch (er: any) {
+      console.log(er);
+    }
   }
-
-  const isLoading = false;
 
   return (
     <Form {...form}>
@@ -49,7 +83,7 @@ const SignupForm = () => {
           To use snapgram, Please enter your details
         </p>
         <form
-          onSubmit={form.handleSubmit(onSubmit)}
+          onSubmit={form.handleSubmit(handleSignup)}
           className="flex flex-col gap-5 w-full mt-4"
         >
           <FormField
@@ -109,7 +143,7 @@ const SignupForm = () => {
           />
           <Button type="submit" className="shad-button_primary">
             {
-              isLoading ?
+              isCreatingAccount || isSignIn || isUserLoading ?
                 <div className="flex-center gap-2">
                   <Loader /> Loading...
                 </div> : "Sign up"
