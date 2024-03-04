@@ -24,7 +24,7 @@ const SigninForm = () => {
   const { checkAuthUser, isLoading: isUserLoading } = useUserContext()
 
   // Queries
-  const { mutateAsync: signInAccount, isPending: isSignIn } = useSignInAccount();
+  const { mutateAsync: signInAccount, isLoading: isSignIn } = useSignInAccount();
 
   const form = useForm<z.infer<typeof signInValidation>>({
     resolver: zodResolver(signInValidation),

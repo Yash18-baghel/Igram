@@ -31,8 +31,8 @@ const PostForm = ({
     })
 
     const { user } = useUserContext();
-    const { mutateAsync: createPost, isPending: isLoadingCreate } = useCreatePost();
-    const { mutateAsync: updatePost, isPending: isLoadingUpdate } = useUpdatePost();
+    const { mutateAsync: createPost, isLoading: isLoadingCreate } = useCreatePost();
+    const { mutateAsync: updatePost, isLoading: isLoadingUpdate } = useUpdatePost();
 
     // Handler
     const handleSubmit = async (value: z.infer<typeof postValidation>) => {
