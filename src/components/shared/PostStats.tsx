@@ -17,7 +17,7 @@ type PostStatsProps = {
 
 const PostStats = ({ post, userId }: PostStatsProps) => {
     const location = useLocation();
-    const likesList = post.likes.map((user: Models.Document) => user.$id);
+    const likesList = post?.likes.map((user: Models.Document) => user.$id);
 
     const [likes, setLikes] = useState<string[]>(likesList);
     const [isSaved, setIsSaved] = useState(false);
@@ -30,7 +30,7 @@ const PostStats = ({ post, userId }: PostStatsProps) => {
 
     const savedPostRecord = useMemo(() => {
         return currentUser?.save.find(
-            (record: Models.Document) => record.post.$id === post.$id
+            (record: Models.Document) => record.post.$id === post?.$id
         )
     }, [currentUser, post]);
 
@@ -52,7 +52,7 @@ const PostStats = ({ post, userId }: PostStatsProps) => {
         }
 
         setLikes(likesArray);
-        likePost({ postId: post.$id, likesArray });
+        likePost({ postId: post?.$id, likesArray });
     };
 
     const handleSavePost = (
@@ -65,7 +65,7 @@ const PostStats = ({ post, userId }: PostStatsProps) => {
             return deleteSavePost(savedPostRecord.$id);
         }
 
-        savePost({ userId: userId, postId: post.$id });
+        savePost({ userId: userId, postId: post?.$id });
         setIsSaved(true);
     };
 
