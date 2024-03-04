@@ -1,3 +1,4 @@
+import Image from "@/components/shared/Image";
 import Loader from "@/components/shared/Loader";
 import PostStats from "@/components/shared/PostStats";
 import { Button } from "@/components/ui/button"
@@ -45,7 +46,7 @@ const PostDetails = () => {
         <Loader />
       ) : (
         <div className="post_details-card">
-          <img
+          <Image
             src={post?.imageUrl}
             alt="creator"
             className="post_details-img"
@@ -56,7 +57,7 @@ const PostDetails = () => {
               <Link
                 to={`/profile/${post?.creator.$id}`}
                 className="flex items-center gap-3">
-                <img
+                <Image
                   src={
                     post?.creator.imageUrl ||
                     "/assets/icons/profile-placeholder.svg"

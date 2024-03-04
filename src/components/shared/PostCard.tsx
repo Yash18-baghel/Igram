@@ -3,6 +3,7 @@ import { formatDateString } from "@/lib/utils"
 import { Models } from "appwrite"
 import { Link } from "react-router-dom"
 import PostStats from "./PostStats"
+import Image from "./Image"
 
 const PostCard = ({ post }: { post: Models.Document }) => {
 
@@ -13,7 +14,7 @@ const PostCard = ({ post }: { post: Models.Document }) => {
             <div className="flex-between">
                 <div className="flex items-center gap-3">
                     <Link to={`/profile/${post.creator.$id}`}>
-                        <img
+                        <Image
                             src={post.creator.imageUrl || '/assets/icons/profile-placeholder.svg'}
                             alt="creator"
                             className="rounded-full w-12 lg:h-12"
@@ -57,12 +58,12 @@ const PostCard = ({ post }: { post: Models.Document }) => {
                         }
                     </ul>
                 </div>
-                <img
+                <Image
                     src={post.imageUrl || '/assets/icons/profile-placeholder.svg'}
                     className="post-card_img"
                     alt="post-image" />
             </Link>
-            <PostStats post={post} userId={user.id}/>
+            <PostStats post={post} userId={user.id} />
         </div>
     )
 }

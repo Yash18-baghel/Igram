@@ -222,7 +222,7 @@ export const likePost = async (postId: string, likesArray: string[]) => {
 
         return updatedPost;
     } catch (err) {
-        console.log();
+        console.log(err);
     }
 }
 
@@ -241,7 +241,7 @@ export const savePost = async (postId: string, userId: string) => {
 
         return updatedPost;
     } catch (err) {
-        console.log();
+        console.log(err);
     }
 }
 
@@ -256,7 +256,7 @@ export const deleteSavedPost = async (saveId: string) => {
 
         return { status: 'ok' };
     } catch (err) {
-        console.log();
+        console.log(err);
     }
 }
 

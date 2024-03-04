@@ -9,6 +9,7 @@ import {
     useDeleteSavedPost,
     useGetCurrentUser,
 } from "@/lib/react-query/queries";
+import Image from "./Image";
 
 type PostStatsProps = {
     post: Models.Document;
@@ -77,7 +78,7 @@ const PostStats = ({ post, userId }: PostStatsProps) => {
         <div
             className={`flex justify-between items-center z-20 ${containerStyles}`}>
             <div className="flex gap-2 mr-5">
-                <img
+                <Image
                     src={`${checkIsLiked(likes, userId)
                         ? "/assets/icons/liked.svg"
                         : "/assets/icons/like.svg"
@@ -92,7 +93,7 @@ const PostStats = ({ post, userId }: PostStatsProps) => {
             </div>
 
             <div className="flex gap-2">
-                <img
+                <Image
                     src={isSaved ? "/assets/icons/saved.svg" : "/assets/icons/save.svg"}
                     alt="share"
                     width={20}

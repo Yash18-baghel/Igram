@@ -48,7 +48,7 @@ const SignupForm = () => {
         return;
       }
 
-      const session = signInAccount({ email: user.email, password: user.password })
+      const session = await signInAccount({ email: user.email, password: user.password })
 
       if (!session) {
         toast({ title: "Something went wrong. Please login your new account", });

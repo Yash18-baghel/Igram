@@ -1,6 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
 
 import { bottombarLinks } from "@/constants";
+import Image from "./Image";
 
 const Bottombar = () => {
   const { pathname } = useLocation();
@@ -15,7 +16,7 @@ const Bottombar = () => {
             to={link.route}
             className={`${isActive && "rounded-[10px] bg-primary-500 "
               } flex-center flex-col gap-1 p-2 transition`}>
-            <img
+            <Image
               src={link.imgURL}
               alt={link.label}
               width={16}
