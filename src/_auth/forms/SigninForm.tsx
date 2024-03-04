@@ -38,7 +38,7 @@ const SigninForm = () => {
   // Handler
   const handleSignup = async (user: z.infer<typeof signInValidation>) => {
     try {
-      
+
       const session = signInAccount(user)
 
       if (!session) {
@@ -57,7 +57,7 @@ const SigninForm = () => {
 
         return;
       }
-    } catch (er: any) {
+    } catch (er) {
       console.log(er);
     }
   }

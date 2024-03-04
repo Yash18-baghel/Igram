@@ -66,7 +66,7 @@ const SignupForm = () => {
 
         return;
       }
-    } catch (er: any) {
+    } catch (er) {
       console.log(er);
     }
   }
