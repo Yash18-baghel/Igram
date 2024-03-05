@@ -74,15 +74,16 @@ const PostStats = ({ post, userId }: PostStatsProps) => {
         ? "w-full"
         : "";
 
+    const isLikedPost = useMemo(() => {
+        return checkIsLiked(likes, userId) ? "/assets/icons/liked.svg" : "/assets/icons/like.svg"
+    }, [likes, userId]);
+
     return (
         <div
             className={`flex justify-between items-center z-20 ${containerStyles}`}>
             <div className="flex gap-2 mr-5">
                 <Image
-                    src={`${checkIsLiked(likes, userId)
-                        ? "/assets/icons/liked.svg"
-                        : "/assets/icons/like.svg"
-                        }`}
+                    src={isLikedPost}
                     alt="like"
                     width={20}
                     height={20}

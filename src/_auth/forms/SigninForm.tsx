@@ -99,7 +99,7 @@ const SigninForm = () => {
               <FormItem>
                 <FormLabel>Password</FormLabel>
                 <FormControl>
-                  <Input type="text" className="shad-input" placeholder="Enter password..." {...field} />
+                  <Input type="password" className="shad-input" placeholder="Enter password..." {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

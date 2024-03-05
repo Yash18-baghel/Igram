@@ -355,12 +355,13 @@ export async function updatePost({
 
 export const deletePost = async (postId: string, imageId: string) => {
     if (!postId || !imageId) throw Error
+
     try {
-        const statusCode = databases.deleteDocument(
+        const statusCode = await databases.deleteDocument(
             appwriteConfig.databaseId,
             appwriteConfig.postCollectionId,
             postId,
-        )
+        );
 
         if (!statusCode) throw Error;
 

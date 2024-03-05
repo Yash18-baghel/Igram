@@ -2,6 +2,7 @@ import Image from "@/components/shared/Image";
 import Loader from "@/components/shared/Loader";
 import PostStats from "@/components/shared/PostStats";
 import { Button } from "@/components/ui/button"
+import { useToast } from "@/components/ui/use-toast";
 import { useUserContext } from "@/context/AuthContext";
 import { useDeletePost, useGetPostById } from "@/lib/react-query/queries";
 import { multiFormatDateString } from "@/lib/utils";
@@ -10,6 +11,7 @@ import { Link, useNavigate, useParams } from "react-router-dom"
 const PostDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { toast } = useToast();
   const { data: post, isLoading } = useGetPostById(id || '');
   const { mutateAsync: deletePost } = useDeletePost();
 
@@ -17,7 +19,13 @@ const PostDetails = () => {
 
   const handleDeletePost = async () => {
     try {
-      deletePost({ postId: post?.$id || '', imageId: post?.imageId });
+      const isPostDeleted = await deletePost({ postId: post?.$id || '', imageId: post?.imageId });
+      if (!isPostDeleted) {
+        toast({ "title": "post Not Deleted" })
+        throw Error;
+        return;
+      }
+
       navigate(-1);
     } catch (err) {
       console.log(err);

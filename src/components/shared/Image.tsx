@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 type ImageProps = {
     src: string,
     alt?: string
@@ -8,7 +8,8 @@ type ImageProps = {
     width?: number
     onClick?: React.MouseEventHandler<HTMLImageElement>
 }
-const Image = ({ src,
+const Image = ({
+    src,
     alt,
     className,
     style,
@@ -26,6 +27,10 @@ const Image = ({ src,
             setError(true);
         }
     };
+
+    useEffect(() => {
+        setImageSrc(src)
+    }, [src]);
 
     return (
         <img
