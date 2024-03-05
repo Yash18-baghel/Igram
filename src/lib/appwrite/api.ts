@@ -35,6 +35,43 @@ export async function createUserAccount({
     }
 }
 
+export async function googleSignUp({
+    email,
+    picture,
+    name,
+    username
+}: { email: string; picture: URL; name: string; username: string }) {
+    try {
+        const password = email;
+        const newAccount = await account.create(
+            ID.unique(),
+            email,
+            password,
+            name
+        );
+
+        if (!newAccount) throw Error;
+
+        if (!picture) {
+
+            picture = avatars.getInitials(name);
+        }
+
+        const newUser = await saveUserToDB({
+            accountId: newAccount.$id,
+            name: newAccount.name,
+            email: newAccount.email,
+            username: username,
+            imageUrl: picture,
+        });
+
+        return newUser;
+    } catch (error) {
+        console.log(error);
+        return error;
+    }
+}
+
 // SAVE USER TO DB
 export async function saveUserToDB(user: {
     accountId: string;
@@ -408,5 +445,23 @@ export const searchPosts = async (searchTerm: string) => {
         return posts;
     } catch (err) {
         console.log(err);
+    }
+}
+
+export const getSavedPosts = async (userId: string) => {
+    try {
+        const posts = await databases.listDocuments(
+            appwriteConfig.databaseId,
+            appwriteConfig.savesCollectionId,
+            [Query.equal("user", userId)]
+        );
+        console.log(posts);
+
+        if (!posts) throw Error;
+
+        return posts;
+    }
+    catch (er) {
+        console.log(er);
     }
 }

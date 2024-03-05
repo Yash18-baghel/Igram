@@ -46,3 +46,10 @@ export type INewUser = {
     username: string;
     password: string;
 };
+
+export interface IGoogleJwtPayload {
+    given_name: string;
+    family_name: string;
+    picture: URL;
+    email: string;
+}

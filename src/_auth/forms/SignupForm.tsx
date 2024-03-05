@@ -14,9 +14,12 @@ import { Input } from "@/components/ui/input"
 import { signUpValidation } from "@/lib/validation";
 import { Loader } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
-import { useCreateUserAccount, useSignInAccount } from "@/lib/react-query/queries";
+import { useCreateUserAccount, useGoogleSignUp, useSignInAccount } from "@/lib/react-query/queries";
 import { useToast } from "@/components/ui/use-toast";
 import { useUserContext } from "@/context/AuthContext";
+import { GoogleLogin } from "@react-oauth/google";
+import { jwtDecode } from "jwt-decode";
+import { IGoogleJwtPayload } from "@/types";
 
 const SignupForm = () => {
   const { toast } = useToast();
@@ -35,12 +38,13 @@ const SignupForm = () => {
 
   // Queries
   const { mutateAsync: createUserAccount, isLoading: isCreatingAccount } = useCreateUserAccount();
+  const { mutateAsync: googleSignUp, isLoading: isgoogleLoggedIn } = useGoogleSignUp();
   const { mutateAsync: signInAccount, isLoading: isSignIn } = useSignInAccount();
 
   // Handler
   const handleSignup = async (user: z.infer<typeof signUpValidation>) => {
     try {
-      const newUser = await createUserAccount(user)
+      const newUser = await createUserAccount(user);
 
       if (!newUser) {
 
@@ -69,6 +73,47 @@ const SignupForm = () => {
     } catch (er) {
       console.log(er);
     }
+  }
+
+  const handleGoogleSignUp = async (credentialResponse: any) => {
+    try {
+      const emailData = jwtDecode<IGoogleJwtPayload>(credentialResponse.credential || '');
+      const user = {
+        name: emailData?.given_name + emailData?.family_name,
+        username: emailData?.given_name + emailData?.family_name,
+        picture: emailData?.picture,
+        email: emailData.email
+      }
+
+      const newUser = await googleSignUp(user);
+      if (!newUser) {
+
+        toast({ title: "Sign up failed. Please try again." })
+        return;
+      }
+
+      const session = await signInAccount({ email: user.email, password: user.email })
+
+      if (!session) {
+        toast({ title: "Something went wrong. Please login your new account", });
+        navigate('/sign-in');
+        return;
+      }
+
+      const isLoggedIn = await checkAuthUser();
+      if (isLoggedIn) {
+        form.reset()
+
+        navigate("/")
+      } else {
+        toast({ title: "Login failed. Please try again.", });
+
+        return;
+      }
+    } catch (er) {
+      console.log(er);
+    }
+
   }
 
   return (
@@ -141,9 +186,19 @@ const SignupForm = () => {
               </FormItem>
             )}
           />
+
+          <div className="flex w-full flex-center flex-1">
+            <GoogleLogin
+              onSuccess={handleGoogleSignUp}
+              onError={() => {
+                console.log('Login Failed');
+              }}
+              useOneTap
+            />
+          </div>
           <Button type="submit" className="shad-button_primary">
             {
-              isCreatingAccount || isSignIn || isUserLoading ?
+              isCreatingAccount || isSignIn || isUserLoading || isgoogleLoggedIn ?
                 <div className="flex-center gap-2">
                   <Loader /> Loading...
                 </div> : "Sign up"

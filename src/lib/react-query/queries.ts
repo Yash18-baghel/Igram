@@ -1,6 +1,6 @@
 import { INewPost, INewUser, IUpdatePost } from "@/types";
 import { QueryClient, useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { createPost, createUserAccount, deletePost, deleteSavedPost, getCurrentUser, getInfinitePosts, getPostById, getRecentPosts, likePost, savePost, searchPosts, signInAccount, signOutAccount, updatePost } from "../appwrite/api";
+import { createPost, createUserAccount, deletePost, deleteSavedPost, getCurrentUser, getInfinitePosts, getPostById, getRecentPosts, getSavedPosts, googleSignUp, likePost, savePost, searchPosts, signInAccount, signOutAccount, updatePost } from "../appwrite/api";
 import { QUERY_KEYS } from "./queryKeys";
 
 export const useCreateUserAccount = () => {
@@ -8,6 +8,14 @@ export const useCreateUserAccount = () => {
         mutationFn: (user: INewUser) => createUserAccount(user),
     });
 };
+
+export const useGoogleSignUp = () => {
+    return useMutation({
+        mutationFn: (user: { email: string; picture: URL; name: string; username: string }
+        ) => googleSignUp(user),
+    });
+};
+
 
 export const useSignInAccount = () => {
     return useMutation({
@@ -55,8 +63,10 @@ export const useLikePost = () => {
             })
             // invalidate/refetch the GET_RECENT_POSTS api
             queryClient.invalidateQueries({
-                queryKey: [QUERY_KEYS.GET_RECENT_POSTS]
-            })
+                queryKey: [QUERY_KEYS.GET_RECENT_POSTS],
+                exact: true,
+                refetchType: 'active',
+            });
             // invalidate/refetch the GET_POSTS api
             queryClient.invalidateQueries({
                 queryKey: [QUERY_KEYS.GET_POSTS]
@@ -167,5 +177,13 @@ export const useSearchPosts = (searchTerm: string) => {
         queryKey: [QUERY_KEYS.SEARCH_POSTS, searchTerm],
         queryFn: () => searchPosts(searchTerm),
         enabled: !!searchTerm
+    })
+}
+
+export const useGetSavedPosts = (userId: string) => {
+    return useQuery({
+        queryKey: [QUERY_KEYS.SAVED_POSTS, userId],
+        queryFn: () => getSavedPosts(userId),
+        enabled: !!userId
     })
 }

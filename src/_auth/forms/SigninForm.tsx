@@ -17,6 +17,9 @@ import { Link, useNavigate } from "react-router-dom";
 import { useSignInAccount } from "@/lib/react-query/queries";
 import { useToast } from "@/components/ui/use-toast";
 import { useUserContext } from "@/context/AuthContext";
+import { GoogleLogin } from "@react-oauth/google";
+import { jwtDecode } from "jwt-decode";
+import { IGoogleJwtPayload } from "@/types";
 
 const SigninForm = () => {
   const { toast } = useToast();
@@ -61,7 +64,34 @@ const SigninForm = () => {
       console.log(er);
     }
   }
+  const handleGoogleSignUp = async (credentialResponse: any) => {
+    try {
+      const emailData = jwtDecode<IGoogleJwtPayload>(credentialResponse.credential || '');
+      const user = {
+        email: emailData.email,
+        password: emailData.email
+      }
 
+      const session = await signInAccount(user);
+      if (!session) {
+        toast({ title: "Login failed. Please try again.", });
+        return;
+      }
+
+      const isLoggedIn = await checkAuthUser();
+      if (isLoggedIn) {
+        form.reset()
+
+        navigate("/")
+      } else {
+        toast({ title: "Login failed. Please try again.", });
+
+        return;
+      }
+    } catch (er) {
+      console.log(er);
+    }
+  }
   return (
     <Form {...form}>
       <div className="sm:w-420 flex-center flex-col">
@@ -113,6 +143,18 @@ const SigninForm = () => {
                 </div> : "Sign up"
             }
           </Button>
+          <p className="text-center text-light-3 small-medium md:base-regular mt-2">
+            OR
+          </p>
+          <div className="flex w-full flex-center flex-1">
+            <GoogleLogin
+              onSuccess={handleGoogleSignUp}
+              onError={() => {
+                console.log('Login Failed');
+              }}
+              useOneTap
+            />
+          </div>
           <p className="text-small-regular text-light-2 text-center mt-1">
             Don&apos;t have an account?
             <Link
