@@ -17,7 +17,7 @@ const UserCard = ({ user }: { user: Models.Document }) => {
                 <p className="body-bold mt-5 text-center">{user.name}</p>
                 <p className="small-regular  text-center mt-1 text-light-3">@{user.username}</p>
                 <div className="flex flex-1 justify-center items-center">
-                    <Button type="submit" className="shad-button_primary mt-5 w-[110px]">
+                    <Button className="shad-button_primary mt-5 w-[110px]">
                         Follow
                     </Button>
                 </div>

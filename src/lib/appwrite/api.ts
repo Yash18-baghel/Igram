@@ -456,7 +456,6 @@ export const getSavedPosts = async (userId: string) => {
             appwriteConfig.savesCollectionId,
             [Query.equal("user", userId)]
         );
-        console.log(posts);
 
         if (!posts) throw Error;
 
@@ -485,4 +484,37 @@ export async function getAllUsers() {
     } catch (error) {
         console.log(error);
     }
+}
+
+export async function getUserById(userId: string) {
+    try {
+        const users = await databases.getDocument(
+            appwriteConfig.databaseId,
+            appwriteConfig.userCollectionId,
+            userId
+        );
+
+        if (!users) throw Error;
+
+        return users;
+
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export const getUsersPosts = async (userId: string) => {
+    try {
+        const post = await databases.listDocuments(
+            appwriteConfig.databaseId,
+            appwriteConfig.postCollectionId,
+            [Query.equal('creator', userId)]
+        );
+
+        if (!post) throw Error;
+        return post;
+    } catch (err) {
+        console.log(err);
+    }
+
 }

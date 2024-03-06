@@ -27,16 +27,15 @@ const Saved = () => {
         <h2 className="h3-bold md:h2-bold w-full">Saved Posts</h2>
       </div>
 
-      <div className="flex flex-wrap gap-9 w-full max-w-5xl mt-10">
-        {isLoading && posts.length === 0 ? (
-          <div className="mt-10">
+      {
+        !posts || isLoading ?
+          <div className="flex flex-1 items-center justify-center">
             <Loader />
+          </div> :
+          <div className="flex flex-wrap gap-9 w-full max-w-5xl mt-10">
+            <GridPostList posts={posts} showStats={false} showUser={false} />
           </div>
-        ) : (
-          <GridPostList posts={posts} showStats={false} showUser={false} />
-        )
-        }
-      </div>
+      }
 
     </div>
   )

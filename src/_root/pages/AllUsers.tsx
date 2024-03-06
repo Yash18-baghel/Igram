@@ -1,8 +1,10 @@
+import Loader from "@/components/shared/Loader";
 import UserCard from "@/components/shared/UserCard";
 import { useGetAllUsers } from "@/lib/react-query/queries";
 
 const AllUsers = () => {
-  const { data: users } = useGetAllUsers();
+  const { data: users, isLoading } = useGetAllUsers();
+
   return (
     <div className="users-container">
       <div className="users-inner_container">
@@ -16,15 +18,20 @@ const AllUsers = () => {
         <h2 className="h3-bold md:h2-bold w-full">All Users</h2>
       </div>
 
-      <div className="flex flex-wrap gap-9 w-full max-w-5xl mt-5">
-        <ul className="grid-container">
-          {
-            users?.documents.map((user) => (
-              <UserCard user={user} />
-            ))
-          }
-        </ul>
-      </div>
+      {
+        !users || isLoading ?
+          <div className="flex flex-1 items-center justify-center">
+            <Loader />
+          </div> :
+          <div className="flex flex-wrap gap-9 w-full max-w-5xl mt-5">
+            <ul className="grid-container">
+              {
+                users?.documents.map((user) => (
+                  <UserCard user={user} />
+                ))
+              }
+            </ul>
+          </div>}
     </div>
   )
 }
