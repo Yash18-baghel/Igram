@@ -432,6 +432,7 @@ export async function getInfinitePosts({ pageParam }: { pageParam: number }) {
         console.log(error);
     }
 }
+
 export const searchPosts = async (searchTerm: string) => {
 
     try {
@@ -463,5 +464,25 @@ export const getSavedPosts = async (userId: string) => {
     }
     catch (er) {
         console.log(er);
+    }
+}
+
+export async function getAllUsers() {
+    try {
+        const currentAccount = await account.get();
+        if (!currentAccount) throw Error;
+
+        const users = await databases.listDocuments(
+            appwriteConfig.databaseId,
+            appwriteConfig.userCollectionId,
+            [Query.orderDesc('$createdAt'), Query.notEqual('accountId', currentAccount.$id)]
+        );
+
+        if (!users) throw Error;
+
+        return users;
+
+    } catch (error) {
+        console.log(error);
     }
 }

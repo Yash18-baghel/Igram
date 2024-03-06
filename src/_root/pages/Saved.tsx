@@ -16,28 +16,28 @@ const Saved = () => {
 
 
   return (
-    <div className="explore-container">
-      <div className="flex w-full">
+    <div className="saved-container">
+      <div className="saved-inner_container">
         <img
           src="/assets/icons/save1.svg"
           width={36}
           height={36}
           alt="filter"
-          className="mr-2"
         />
         <h2 className="h3-bold md:h2-bold w-full">Saved Posts</h2>
       </div>
 
       <div className="flex flex-wrap gap-9 w-full max-w-5xl mt-10">
+        {isLoading && posts.length === 0 ? (
+          <div className="mt-10">
+            <Loader />
+          </div>
+        ) : (
+          <GridPostList posts={posts} showStats={false} showUser={false} />
+        )
+        }
       </div>
-      {isLoading && posts.length === 0 ? (
-        <div className="mt-10">
-          <Loader />
-        </div>
-      ) : (
-        <GridPostList posts={posts} showStats={false} showUser={false} />
-      )
-      }
+
     </div>
   )
 }
