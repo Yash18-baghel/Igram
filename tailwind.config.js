@@ -15,11 +15,12 @@ module.exports = {
       padding: '2rem',
       screens: {
         '2xl': '1400px',
-      
+
       },
     },
     extend: {
       colors: {
+        'piramary-400': '#0095F6',
         'primary-500': '#877EFF',
         'primary-600': '#5D5FEF',
         'secondary-500': '#FFB620',
@@ -36,7 +37,7 @@ module.exports = {
       },
       screens: {
         'xs': '480px',
-      
+
       },
       width: {
         '420': '420px',

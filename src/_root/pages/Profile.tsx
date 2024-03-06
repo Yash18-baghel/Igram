@@ -1,11 +1,13 @@
 import GridPostList from "@/components/shared/GridPostList";
 import Loader from "@/components/shared/Loader";
 import { Button } from "@/components/ui/button";
+import { useUserContext } from "@/context/AuthContext";
 import { useGetUserById, useGetUsersPosts } from "@/lib/react-query/queries";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 const Profile = () => {
     const { id = '' } = useParams();
+    const { user: current } = useUserContext();
     const { data: user, isLoading: isUserLoading } = useGetUserById(id);
     const { data: posts, isLoading } = useGetUsersPosts(id);
 
@@ -29,16 +31,20 @@ const Profile = () => {
                     <div className="flex flex-1 flex-col">
                         <div className=" flex w-1/2 justify-between">
                             <p className="font-bold text-2xl text-center">{user.name}</p>
-                            <Button className="Edit-button_primary">
-                                <img
-                                    src={'/assets/icons/edit-yellow.svg'}
-                                    width={16}
-                                    height={16}
-                                    alt="profile_pic"
-                                    className="rounded-full"
-                                />
-                                Edit Profile
-                            </Button>
+                            {current.id === user.$id &&
+                                <Link to='/user/update'>
+                                    <Button className="Edit-button_primary">
+                                        <img
+                                            src={'/assets/icons/edit-yellow.svg'}
+                                            width={16}
+                                            height={16}
+                                            alt="profile_pic"
+                                            className="rounded-full"
+                                        />
+                                        Edit Profile
+                                    </Button>
+                                </Link>
+                            }
                         </div>
                         <div>
                             <p className="small-regular text-light-3">@{user.username}</p>

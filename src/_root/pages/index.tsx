@@ -7,3 +7,4 @@ export { default as PostDetails } from './PostDetails';
 export { default as Profile } from './Profile';
 export { default as Saved } from './Saved';
 export { default as UpdateProfile } from './UpdateProfile';
+export { default as EditUser } from './EditUser';

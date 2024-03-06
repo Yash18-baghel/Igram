@@ -1,4 +1,4 @@
-import { INewPost, INewUser, IUpdatePost } from "@/types";
+import { INewPost, INewUser, IUpdatePost, IUpdateUser } from "@/types";
 import { account, appwriteConfig, avatars, databases, storage } from "./config";
 import { ID, Query } from "appwrite";
 // SIGN UP
@@ -517,4 +517,54 @@ export const getUsersPosts = async (userId: string) => {
         console.log(err);
     }
 
+}
+
+export async function updateUser({
+    userId,
+    imageId,
+    file,
+    name,
+    email,
+    username,
+    bio
+}: IUpdateUser) {
+    try {
+
+        // upload image to storage
+        const uploadedFile = await uploadfile(file[0]);
+        if (!uploadedFile) throw Error;
+
+        // get file url
+        const fileUrl = getPreviewUrl(uploadedFile.$id);
+        if (!fileUrl) {
+            await deleteFile(uploadedFile.$id);
+            throw Error;
+        }
+
+        await deleteFile(imageId);
+
+        // update user
+        const updatedUser = await databases.updateDocument(
+            appwriteConfig.databaseId,
+            appwriteConfig.userCollectionId,
+            userId,
+            {
+                name,
+                email,
+                username,
+                bio,
+                imageUrl: fileUrl,
+                imageId: uploadedFile?.$id,
+            }
+        );
+
+        if (!updatedUser) {
+            await deleteFile(uploadedFile.$id);
+            throw Error;
+        }
+
+        return updatedUser
+    } catch (error) {
+        console.log(error);
+    }
 }

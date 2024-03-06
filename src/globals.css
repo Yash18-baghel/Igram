@@ -302,7 +302,7 @@
 
   /* Button */
   .Edit-button_primary {
-    @apply bg-dark-4 hover:bg-primary-500 text-light-1 flex gap-2 !important;
+    @apply bg-dark-4 hover:bg-dark-3 text-light-1 flex gap-2 !important;
   }
 
   .shad-button_dark_4 {

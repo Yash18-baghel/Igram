@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { useSignOutAccount } from "@/lib/react-query/queries";
 import { useUserContext, INITIAL_USER } from "@/context/AuthContext";
 import Image from "./Image";
+import Loader from "./Loader";
 
 const LeftSidebar = () => {
     const navigate = useNavigate();
@@ -39,7 +40,7 @@ const LeftSidebar = () => {
 
                 {isLoading || !user.email ? (
                     <div className="h-14">
-                        {/* <Loader /> */}
+                        <Loader />
                     </div>
                 ) : (
                     <Link to={`/profile/${user.id}`} className="flex gap-3 items-center">
