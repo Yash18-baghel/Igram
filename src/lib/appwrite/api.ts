@@ -607,3 +607,65 @@ export const unFollow = async (followsId: string) => {
         console.log(er);
     }
 }
+
+export const addComment = async ({
+    userId,
+    postId,
+    text
+}: { userId: string; postId: string; text: string }) => {
+    try {
+        const newComment = await databases.createDocument(
+            appwriteConfig.databaseId,
+            appwriteConfig.commentsCollectionId,
+            ID.unique(),
+            {
+                user: userId,
+                post: postId,
+                text
+            }
+        );
+
+        if (!newComment) throw Error;
+
+        return newComment;
+    } catch (er) {
+        console.log(er);
+    }
+}
+
+export const deleteComment = async (commentId: string) => {
+    try {
+        const statusCode = await databases.deleteDocument(
+            appwriteConfig.databaseId,
+            appwriteConfig.commentsCollectionId,
+            commentId
+        );
+
+        if (!statusCode) throw Error;
+
+        return { status: 'ok' };
+    } catch (er) {
+        console.log(er);
+    }
+}
+
+export const likeComment = async ({
+    commentId,
+    likesArray
+}: { commentId: string; likesArray: string[] }) => {
+    try {
+        const updatedComment = await databases.updateDocument(
+            appwriteConfig.databaseId,
+            appwriteConfig.commentsCollectionId,
+            commentId,
+            {
+                likes: likesArray
+            }
+        );
+        if (!updatedComment) throw Error;
+
+        return updatedComment;
+    } catch (err) {
+        console.log(err);
+    }
+}

@@ -33,7 +33,7 @@ const Saved = () => {
             <Loader />
           </div> :
           <div className="flex flex-wrap gap-9 w-full max-w-5xl mt-10">
-            <GridPostList posts={posts} showStats={false} showUser={false} />
+            <GridPostList posts={posts} showStats={false} showUser={true} />
           </div>
       }
 

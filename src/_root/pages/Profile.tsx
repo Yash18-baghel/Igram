@@ -56,8 +56,8 @@ const Profile = () => {
     return (
         <div className="profile-container">
             <div className="profile-inner_container">
-                <div className="flex-1 flex gap-5">
-                    <div>
+                <div className="flex-1 flex w-full gap-5">
+                    <div className="flex flex-col">
                         <img
                             src={user?.imageUrl}
                             width={90}
@@ -66,8 +66,8 @@ const Profile = () => {
                             className="h-24 w-24 rounded-full"
                         />
                     </div>
-                    <div className="flex flex-1 flex-col">
-                        <div className=" flex w-3/4 justify-between">
+                    <div className="flex w-3/4 flex-col">
+                        <div className="flex flex-1 w-1/2 justify-between">
                             <p className="font-bold text-2xl text-center">{user.name}</p>
                             {currentUser.id === user.$id ?
                                 <Link to='/user/update'>
@@ -95,26 +95,26 @@ const Profile = () => {
                             <p className="small-regular text-light-3">@{user.username}</p>
                         </div>
                         <div className="flex my-5 gap-9">
-                            <div className="posts">
-                                <p className="text-2xl text-primary-500">{user.posts?.length}</p>
+                            <div className="user-account-info">
+                                <p className="h4-semibold text-primary-500">{user.posts?.length}</p>
                                 <h2 className="body-bold">Posts</h2>
                             </div>
-                            <div className="posts">
-                                <p className="text-2xl text-primary-500">{user.follower?.length}</p>
+                            <div className="user-account-info">
+                                <p className="h4-semibold text-primary-500">{user.follower?.length}</p>
                                 <h2 className="body-bold">Followers</h2>
                             </div>
-                            <div className="posts">
-                                <p className="text-2xl text-primary-500">{user.following?.length}</p>
+                            <div className="user-account-info">
+                                <p className="h4-semibold text-primary-500">{user.following?.length}</p>
                                 <h2 className="body-bold">Following</h2>
                             </div>
                         </div>
                         <div className="flex">
-                            <p>🌿 Capturing the essence of nature through my lens <br />
-                                ✨ "In every walk with nature, one receives far more than he seeks." - John Muir
-                            </p>
+                            <p>{user.bio}</p>
                         </div>
                     </div>
                 </div>
+                <hr className="border w-full border-dark-4/80" />
+
             </div>
             <div className="flex flex-wrap gap-9 w-full max-w-5xl mt-10">
                 {isLoading && !posts || posts?.documents?.length === 0 ? (
