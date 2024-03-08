@@ -568,3 +568,42 @@ export async function updateUser({
         console.log(error);
     }
 }
+
+export const addFollowing = async ({
+    followerId,
+    followingId
+}: { followerId: string; followingId: string }) => {
+    try {
+        const newFollow = await databases.createDocument(
+            appwriteConfig.databaseId,
+            appwriteConfig.followsCollectionId,
+            ID.unique(),
+            {
+                follower: followerId,
+                following: followingId
+            }
+        );
+
+        if (!newFollow) throw Error;
+
+        return newFollow;
+    } catch (er) {
+        console.log(er);
+    }
+}
+
+export const unFollow = async (followsId: string) => {
+    try {
+        const statusCode = await databases.deleteDocument(
+            appwriteConfig.databaseId,
+            appwriteConfig.followsCollectionId,
+            followsId
+        );
+
+        if (!statusCode) throw Error;
+
+        return { status: 'ok' };
+    } catch (er) {
+        console.log(er);
+    }
+}

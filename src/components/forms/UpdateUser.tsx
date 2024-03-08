@@ -135,7 +135,7 @@ const UpdateUser = ({ user }: { user: IUser }) => {
                             isLoading ?
                                 <div className="flex-center gap-2">
                                     <Loader /> Loading...
-                                </div> : "Sign up"
+                                </div> : "Update Profile"
                         }
                     </Button>
                 </div>

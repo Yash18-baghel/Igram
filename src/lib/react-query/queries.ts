@@ -1,7 +1,9 @@
 import { INewPost, INewUser, IUpdatePost, IUpdateUser } from "@/types";
 import { QueryClient, useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { createPost, createUserAccount, deletePost, deleteSavedPost, getAllUsers, getCurrentUser, getInfinitePosts, getPostById, getRecentPosts, getSavedPosts, getUserById, getUsersPosts, googleSignUp, likePost, savePost, searchPosts, signInAccount, signOutAccount, updatePost, updateUser } from "../appwrite/api";
+import { addFollowing, createPost, createUserAccount, deletePost, deleteSavedPost, getAllUsers, getCurrentUser, getInfinitePosts, getPostById, getRecentPosts, getSavedPosts, getUserById, getUsersPosts, googleSignUp, likePost, savePost, searchPosts, signInAccount, signOutAccount, unFollow, updatePost, updateUser } from "../appwrite/api";
 import { QUERY_KEYS } from "./queryKeys";
+
+const queryClient = new QueryClient();
 
 export const useCreateUserAccount = () => {
     return useMutation({
@@ -59,7 +61,7 @@ export const useLikePost = () => {
         onSuccess: (data) => {
             // invalidate/refetch the POST_BY_ID api by the id of post which is upadted 
             queryClient.invalidateQueries({
-                queryKey: [QUERY_KEYS.GET_POST_BY_ID, data?.$id]
+                queryKey: [QUERY_KEYS.GET_POST_BY_ID, { postId: data?.$id }]
             })
             // invalidate/refetch the GET_RECENT_POSTS api
             queryClient.invalidateQueries({
@@ -131,19 +133,19 @@ export const useGetPostById = (postId: string) => {
 }
 
 export const useUpdatePost = () => {
-    const queryClient = new QueryClient();
+
     return useMutation({
         mutationFn: (post: IUpdatePost) => updatePost(post),
         onSuccess: (data) => {
             queryClient.invalidateQueries({
-                queryKey: [QUERY_KEYS.GET_POST_BY_ID, data?.id]
+                queryKey: [QUERY_KEYS.GET_POST_BY_ID, { postId: data?.id }]
             })
         }
     })
 };
 
 export const useDeletePost = () => {
-    const queryClient = new QueryClient();
+
 
     return useMutation({
         mutationFn: ({ postId, imageId }: { postId: string, imageId: string }) => deletePost(postId, imageId),
@@ -197,7 +199,7 @@ export const useGetAllUsers = () => {
 
 export const useGetUserById = (userId: string) => {
     return useQuery({
-        queryKey: [QUERY_KEYS.GET_USER_BY_ID, userId],
+        queryKey: [QUERY_KEYS.GET_USER_BY_ID, { userId }],
         queryFn: () => getUserById(userId),
         enabled: !!userId
     })
@@ -212,7 +214,7 @@ export const useGetUsersPosts = (userId: string) => {
 }
 
 export const useUpadteUser = () => {
-    const queryClient = new QueryClient();
+
     return useMutation({
         mutationFn: (post: IUpdateUser) => updateUser(post),
         onSuccess: (data) => {
@@ -225,3 +227,39 @@ export const useUpadteUser = () => {
         }
     })
 };
+
+export const useAddFollowing = () => {
+    return useMutation({
+        mutationFn: (follow: { followerId: string; followingId: string }) => addFollowing(follow),
+        onSuccess: (data) => {
+            queryClient.invalidateQueries({
+                queryKey: [QUERY_KEYS.GET_USERS]
+            })
+            queryClient.invalidateQueries({
+                queryKey: [QUERY_KEYS.GET_CURRENT_USER]
+            })
+
+            queryClient.invalidateQueries({
+                queryKey: [QUERY_KEYS.GET_USER_BY_ID, data?.follower?.$id],
+
+            })
+        }
+    })
+}
+
+export const useUnFollow = (followerId: string) => {
+    return useMutation({
+        mutationFn: (followsId: string) => unFollow(followsId),
+        onSuccess: () => {
+            queryClient.invalidateQueries({
+                queryKey: [QUERY_KEYS.GET_USERS]
+            })
+            queryClient.invalidateQueries({
+                queryKey: [QUERY_KEYS.GET_CURRENT_USER]
+            })
+            queryClient.invalidateQueries({
+                queryKey: [QUERY_KEYS.GET_USER_BY_ID, followerId]
+            })
+        }
+    })
+}

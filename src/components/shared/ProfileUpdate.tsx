@@ -46,7 +46,7 @@ const ProfileUpdate = ({ fileChange, mediaUrl }: ProfileUpdateProps) => {
 
                             />
                             <div className="flex justify-center items-center">
-                                <h2 className="body-bold text-piramary-400">Chnange Profile Photo</h2>
+                                <h2 className="body-bold text-piramary-400">Change Profile Photo</h2>
                             </div>
                         </div>
                     </Fragment>
@@ -59,4 +59,4 @@ const ProfileUpdate = ({ fileChange, mediaUrl }: ProfileUpdateProps) => {
     )
 }
 
-export default ProfileUpdate
+export default ProfileUpdate;

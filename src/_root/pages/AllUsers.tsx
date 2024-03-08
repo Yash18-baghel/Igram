@@ -26,8 +26,8 @@ const AllUsers = () => {
           <div className="flex flex-wrap gap-9 w-full max-w-5xl mt-5">
             <ul className="grid-container">
               {
-                users?.documents.map((user) => (
-                  <UserCard user={user} />
+                users?.documents.map((user, key) => (
+                  <UserCard user={user} key={key} />
                 ))
               }
             </ul>
