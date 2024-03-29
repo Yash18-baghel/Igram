@@ -68,7 +68,7 @@ export async function googleSignUp({
         return newUser;
     } catch (error) {
         console.log(error);
-        return error;
+        return { msg: 'error', error };
     }
 }
 
@@ -98,8 +98,9 @@ export async function signInAccount(user: { email: string, password: string }) {
     try {
         const session = await account.createEmailSession(user.email, user.password);
         return session;
-    } catch (er) {
-        console.log(er);
+    } catch (error) {
+        console.log(error);
+        return { msg: 'error', error };
     }
 }
 

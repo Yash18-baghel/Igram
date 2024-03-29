@@ -86,6 +86,13 @@ const SignupForm = () => {
       }
 
       const newUser = await googleSignUp(user);
+
+      if (newUser?.error?.type === "user_already_exists") {
+        toast({ title: "Email already registered. Please try Sign in." })
+        navigate('/sign-in');
+        return;
+      }
+
       if (!newUser) {
 
         toast({ title: "Sign up failed. Please try again." })

@@ -67,8 +67,10 @@ const Profile = () => {
                         />
                     </div>
                     <div className="flex w-3/4 flex-col">
-                        <div className="flex flex-1 w-1/2 justify-between">
-                            <p className="font-bold text-2xl text-center">{user.name}</p>
+                        <div className="flex sm:w-1/2 justify-between">
+                            {/* <div className="w-full"> */}
+                            <p className="flex font-bold sm:text-2xl text-light-2 items-center justify-center text-center">{user.name}</p>
+                            {/* </div> */}
                             {currentUser.id === user.$id ?
                                 <Link to='/user/update'>
                                     <Button className="Edit-button_primary">
@@ -94,7 +96,7 @@ const Profile = () => {
                         <div>
                             <p className="small-regular text-light-3">@{user.username}</p>
                         </div>
-                        <div className="flex my-5 gap-9">
+                        <div className="sm:flex hidden my-5 gap-9">
                             <div className="user-account-info">
                                 <p className="h4-semibold text-primary-500">{user.posts?.length}</p>
                                 <h2 className="body-bold">Posts</h2>
@@ -109,8 +111,23 @@ const Profile = () => {
                             </div>
                         </div>
                         <div className="flex">
-                            <p>{user.bio}</p>
+                            <p >{user.bio}</p>
                         </div>
+                    </div>
+
+                </div>
+                <div className="flex  sm:hidden gap-5">
+                    <div className="user-account-info">
+                        <p className="h4-semibold text-primary-500">{user.posts?.length}</p>
+                        <h2 className="body-bold">Posts</h2>
+                    </div>
+                    <div className="user-account-info">
+                        <p className="h4-semibold text-primary-500">{user.follower?.length}</p>
+                        <h2 className="body-bold">Followers</h2>
+                    </div>
+                    <div className="user-account-info">
+                        <p className="h4-semibold text-primary-500">{user.following?.length}</p>
+                        <h2 className="body-bold">Following</h2>
                     </div>
                 </div>
                 <hr className="border w-full border-dark-4/80" />
