@@ -74,7 +74,7 @@ const SigninForm = () => {
 
       const session = await signInAccount(user);
 
-      if (session?.msg) {
+      if ('msg' in session) {
         toast({ title: "Login failed. Please try again.", });
         return;
       }
